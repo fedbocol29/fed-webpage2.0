@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Koi Luxury</title>
 
 <style>
-
 *{
 margin:0;
 padding:0;
@@ -20,159 +19,110 @@ font-family:Arial,sans-serif;
 }
 
 body{
-
 background:
-radial-gradient(circle at center,
-#b10000 0%,
-#7a0000 45%,
-#2f0000 100%);
-
+radial-gradient(circle at center,#b30000,#700000 60%,#2a0000);
 }
 
 .hero{
-
 position:relative;
 width:100vw;
 height:100vh;
 overflow:hidden;
-
 }
 
 .glow{
-
 position:absolute;
 inset:0;
-
 background:
-radial-gradient(circle at 50% 35%,
-rgba(255,120,120,.25),
+radial-gradient(circle at center,
+rgba(255,130,130,.18),
 transparent 55%);
-
-animation:glow 6s ease-in-out infinite;
-
+animation:pulse 6s ease-in-out infinite;
 }
 
-.koi{
-
+.fish{
 position:absolute;
-
-width:min(78vw,820px);
-
 left:58%;
 top:44%;
+width:min(80vw,850px);
+aspect-ratio:4/5;
+transform:translate(-50%,-50%);
+filter:drop-shadow(0 45px 45px rgba(0,0,0,.45));
+}
 
-transform:translate(-50%,-50%) rotate(-18deg);
+.head,.body,.tail,.fin{
+position:absolute;
+inset:0;
+background:url("assets/koi.jpg") center/cover no-repeat;
+}
 
-filter:
-drop-shadow(0 45px 45px rgba(0,0,0,.45))
-drop-shadow(0 10px 25px rgba(255,120,0,.2));
+.head{
+clip-path:polygon(58% 0%,100% 0%,100% 100%,55% 100%);
+z-index:5;
+}
 
-animation:floatFish 8s ease-in-out infinite;
+.body{
+clip-path:polygon(34% 0%,66% 0%,66% 100%,34% 100%);
+transform-origin:66% 50%;
+z-index:4;
+}
 
-transition:transform .25s ease-out;
+.tail{
+clip-path:polygon(0% 0%,42% 0%,42% 100%,0% 100%);
+transform-origin:42% 50%;
+z-index:3;
+}
 
+.fin-left{
+clip-path:polygon(46% 34%,65% 24%,58% 48%);
+transform-origin:60% 35%;
+z-index:6;
+}
+
+.fin-right{
+clip-path:polygon(46% 66%,65% 76%,58% 52%);
+transform-origin:60% 65%;
+z-index:6;
 }
 
 .content{
-
 position:absolute;
 left:7%;
 bottom:10%;
-z-index:10;
 color:white;
-
+z-index:10;
 }
 
 .content h1{
-
 font-size:clamp(3rem,8vw,7rem);
-
 line-height:.9;
-
 font-weight:900;
-
 letter-spacing:-3px;
-
 }
 
 .content p{
-
 margin-top:22px;
-
 max-width:420px;
-
 line-height:1.7;
-
-font-size:1.1rem;
-
-color:#ffe7e7;
-
+color:#ffeaea;
 }
 
 button{
-
-margin-top:30px;
-
+margin-top:28px;
 padding:18px 34px;
-
 border:none;
-
 border-radius:40px;
-
 background:white;
-
 color:#8b0000;
-
 font-weight:bold;
-
-font-size:1rem;
-
 cursor:pointer;
-
-transition:.35s;
-
 }
 
-button:hover{
-
-transform:translateY(-4px);
-
-}
-
-@keyframes floatFish{
-
-0%{
-transform:translate(-50%,-50%) rotate(-18deg);
-}
-
-25%{
-transform:translate(-49%,-51%) rotate(-16deg);
-}
-
-50%{
-transform:translate(-50%,-49%) rotate(-18deg);
-}
-
-75%{
-transform:translate(-51%,-50%) rotate(-20deg);
-}
-
-100%{
-transform:translate(-50%,-50%) rotate(-18deg);
-}
-
-}
-
-@keyframes glow{
-
+@keyframes pulse{
 0%,100%{opacity:.55;}
-
 50%{opacity:1;}
-
 }
-
 </style>
-
 </head>
 
 <body>
@@ -183,15 +133,15 @@ transform:translate(-50%,-50%) rotate(-18deg);
 
 <div class="fish" id="fish">
 
-  <div class="tail"></div>
+<div class="tail"></div>
 
-  <div class="body"></div>
+<div class="body"></div>
 
-  <div class="head"></div>
+<div class="head"></div>
 
-  <div class="fin fin-left"></div>
+<div class="fin fin-left"></div>
 
-  <div class="fin fin-right"></div>
+<div class="fin fin-right"></div>
 
 </div>
 
@@ -211,32 +161,53 @@ Luxury products inspired by timeless Japanese craftsmanship.
 
 <script>
 
-const koi=document.getElementById("koi");
+const fish=document.getElementById("fish");
 
-let mx=0,my=0;
-let cx=0,cy=0;
+const tail=document.querySelector(".tail");
+const body=document.querySelector(".body");
+const head=document.querySelector(".head");
+const finLeft=document.querySelector(".fin-left");
+const finRight=document.querySelector(".fin-right");
+
+let mx=0,my=0,cx=0,cy=0;
 
 document.addEventListener("mousemove",(e)=>{
 
-mx=(e.clientX/window.innerWidth-.5)*22;
-my=(e.clientY/window.innerHeight-.5)*16;
+mx=(e.clientX/window.innerWidth-.5)*20;
+my=(e.clientY/window.innerHeight-.5)*12;
 
 });
 
-function animate(){
+function animate(time){
+
+const t=time*.001;
 
 cx+=(mx-cx)*.05;
 cy+=(my-cy)*.05;
 
-koi.style.transform=
-`translate(calc(-50% + ${cx}px), calc(-50% + ${cy}px))
-rotate(${-18+cx*.08}deg)`;
+const swimX=Math.sin(t*.42)*120;
+const swimY=Math.sin(t*.84)*55;
+
+fish.style.transform=`
+translate(calc(-50% + ${swimX+cx}px),
+calc(-50% + ${swimY+cy}px))
+rotate(${-18+Math.sin(t*.42)*5}deg)`;
+
+tail.style.transform=`rotate(${Math.sin(t*8)*18}deg)`;
+
+body.style.transform=`rotate(${Math.sin(t*4)*3}deg)`;
+
+head.style.transform=`rotate(${Math.sin(t*4+.8)}deg)`;
+
+finLeft.style.transform=`rotate(${Math.sin(t*10)*24}deg)`;
+
+finRight.style.transform=`rotate(${-Math.sin(t*10)*24}deg)`;
 
 requestAnimationFrame(animate);
 
 }
 
-animate();
+requestAnimationFrame(animate);
 
 </script>
 
