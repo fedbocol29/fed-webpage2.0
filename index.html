@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Koi Luxury</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html,body{
+height:100%;
+overflow:hidden;
+font-family:Arial,sans-serif;
+}
+
+body{
+
+background:
+radial-gradient(circle at center,
+#b10000 0%,
+#7a0000 45%,
+#2f0000 100%);
+
+}
+
+.hero{
+
+position:relative;
+width:100vw;
+height:100vh;
+overflow:hidden;
+
+}
+
+.glow{
+
+position:absolute;
+inset:0;
+
+background:
+radial-gradient(circle at 50% 35%,
+rgba(255,120,120,.25),
+transparent 55%);
+
+animation:glow 6s ease-in-out infinite;
+
+}
+
+.koi{
+
+position:absolute;
+
+width:min(78vw,820px);
+
+left:58%;
+top:44%;
+
+transform:translate(-50%,-50%) rotate(-18deg);
+
+filter:
+drop-shadow(0 45px 45px rgba(0,0,0,.45))
+drop-shadow(0 10px 25px rgba(255,120,0,.2));
+
+animation:floatFish 8s ease-in-out infinite;
+
+transition:transform .25s ease-out;
+
+}
+
+.content{
+
+position:absolute;
+left:7%;
+bottom:10%;
+z-index:10;
+color:white;
+
+}
+
+.content h1{
+
+font-size:clamp(3rem,8vw,7rem);
+
+line-height:.9;
+
+font-weight:900;
+
+letter-spacing:-3px;
+
+}
+
+.content p{
+
+margin-top:22px;
+
+max-width:420px;
+
+line-height:1.7;
+
+font-size:1.1rem;
+
+color:#ffe7e7;
+
+}
+
+button{
+
+margin-top:30px;
+
+padding:18px 34px;
+
+border:none;
+
+border-radius:40px;
+
+background:white;
+
+color:#8b0000;
+
+font-weight:bold;
+
+font-size:1rem;
+
+cursor:pointer;
+
+transition:.35s;
+
+}
+
+button:hover{
+
+transform:translateY(-4px);
+
+}
+
+@keyframes floatFish{
+
+0%{
+transform:translate(-50%,-50%) rotate(-18deg);
+}
+
+25%{
+transform:translate(-49%,-51%) rotate(-16deg);
+}
+
+50%{
+transform:translate(-50%,-49%) rotate(-18deg);
+}
+
+75%{
+transform:translate(-51%,-50%) rotate(-20deg);
+}
+
+100%{
+transform:translate(-50%,-50%) rotate(-18deg);
+}
+
+}
+
+@keyframes glow{
+
+0%,100%{opacity:.55;}
+
+50%{opacity:1;}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<section class="hero">
+
+<div class="glow"></div>
+
+<img src="assets/koi.jpg"
+class="koi"
+id="koi"
+alt="Koi Fish">
+
+<div class="content">
+
+<h1>CREATE<br>EVERY DAY</h1>
+
+<p>
+Luxury products inspired by timeless Japanese craftsmanship.
+</p>
+
+<button>Shop Now</button>
+
+</div>
+
+</section>
+
+<script>
+
+const koi=document.getElementById("koi");
+
+let mx=0,my=0;
+let cx=0,cy=0;
+
+document.addEventListener("mousemove",(e)=>{
+
+mx=(e.clientX/window.innerWidth-.5)*22;
+my=(e.clientY/window.innerHeight-.5)*16;
+
+});
+
+function animate(){
+
+cx+=(mx-cx)*.05;
+cy+=(my-cy)*.05;
+
+koi.style.transform=
+`translate(calc(-50% + ${cx}px), calc(-50% + ${cy}px))
+rotate(${-18+cx*.08}deg)`;
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
+
+</script>
+
+</body>
+</html>
